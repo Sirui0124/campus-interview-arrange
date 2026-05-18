@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from lib.data_reader import load_all_data, extract_doc_id, get_full_data
 from lib.scheduler import schedule
-from lib.result_writer import write_results, print_results_summary
+from lib.result_writer import write_results, print_results_summary, update_candidate_status
 
 
 def main():
@@ -51,6 +51,10 @@ def main():
         print(f"\n写入到 sheet: {write_target}")
         count = write_results(doc_id, sheets, results, target_sheet_title=write_target)
         print(f"写入完成: {count} 条记录")
+
+        print("更新候选人清单安排状态...")
+        update_candidate_status(doc_id, sheets, results)
+        print("安排状态已更新")
 
 
 if __name__ == "__main__":

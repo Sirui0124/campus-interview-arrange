@@ -83,6 +83,28 @@ def write_results(
     return len(results)
 
 
+def update_candidate_status(
+    doc_id: str,
+    sheets: list[dict],
+    results: list[ScheduledSession],
+    status_col: int = 12,
+):
+    """Write '已安排' to the 安排状态 column in 候选人清单 for scheduled candidates."""
+    sheet = find_sheet(sheets, "候选人清单")
+    if not sheet:
+        return
+
+    sheet_id = sheet["sheetId"]
+    cells = []
+    for session in results:
+        row = session.candidate.row_index
+        cells.append({"row": row, "col": status_col, "value": "已安排"})
+
+    for i in range(0, len(cells), 50):
+        batch = cells[i:i + 50]
+        batch_set_cells(doc_id, sheet_id, batch)
+
+
 def print_results_summary(results: list[ScheduledSession], unscheduled: list):
     print(f"\n{'='*60}")
     print(f"排面完成：已安排 {len(results)} 人，未排上 {len(unscheduled)} 人")
