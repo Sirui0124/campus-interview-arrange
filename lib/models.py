@@ -25,6 +25,12 @@ class InterviewerRole(Enum):
     SECONDARY = "副面"
 
 
+class PriorityTier(Enum):
+    HIGH = "高优"
+    MID = "次优"
+    LOW = "低优"
+
+
 @dataclass
 class TimeSlot:
     date: date
@@ -91,6 +97,8 @@ class Candidate:
     status: Optional[str]  # "已安排" or None
     invite_status: Optional[str]
     row_index: int  # original row in spreadsheet (for write-back)
+    # Runtime state (assigned by scheduler before scheduling)
+    tier: Optional[PriorityTier] = None
 
     @property
     def is_overseas(self) -> bool:
@@ -98,8 +106,6 @@ class Candidate:
 
     @property
     def effective_priority(self) -> float:
-        if self.priority_score == 0:
-            return 2.5  # mid-value for unscored
         return self.priority_score
 
 
