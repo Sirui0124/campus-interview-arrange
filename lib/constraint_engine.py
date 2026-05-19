@@ -1,6 +1,4 @@
 from __future__ import annotations
-from typing import Optional
-
 from .models import Interviewer, Candidate, InterviewFormat
 
 
@@ -8,14 +6,6 @@ def format_compatible(i_fmt: InterviewFormat, c_fmt: InterviewFormat) -> bool:
     if i_fmt == InterviewFormat.ANY or c_fmt == InterviewFormat.ANY:
         return True
     return i_fmt == c_fmt
-
-
-def city_compatible(i_city: str, c_city: Optional[str]) -> bool:
-    if not i_city or i_city == "不限":
-        return True
-    if not c_city or c_city == "不限":
-        return True
-    return i_city == c_city
 
 
 def position_compatible(interviewer: Interviewer, candidate: Candidate) -> bool:
@@ -44,7 +34,5 @@ def is_eligible(interviewer: Interviewer, candidate: Candidate) -> bool:
     if not direction_compatible(interviewer, candidate):
         return False
     if not format_compatible(interviewer.format, candidate.format):
-        return False
-    if not city_compatible(interviewer.city, candidate.interview_city):
         return False
     return True
